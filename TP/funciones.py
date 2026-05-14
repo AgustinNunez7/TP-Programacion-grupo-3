@@ -36,3 +36,23 @@ def crear_usuario()->list:
         ]
 
     return usuario
+
+
+def buscar_usuario(lista:list, nombre:str, contra:str)->bool:
+    inicio = False
+    
+    for i in range(len(lista)):
+        if lista[i][4] == nombre and lista[i][2] == contra:
+            inicio = True
+
+    return inicio
+
+def iniciar_secion(lista:list):
+    nombre = input("Ingrese su nombre: ")
+    contraseña = input("Ingrese su contraseña: ")
+    while buscar_usuario(lista, nombre, contraseña) != True:
+        print("Nombre o contraseña incorrectos")
+        nombre = input("Ingrese su nombre: ")
+        contraseña = input("Ingrese su contraseña: ")  
+
+

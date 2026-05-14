@@ -12,7 +12,8 @@ while continuar == True:
         usuarios.append(crear_usuario())
         print("Usuario registrado")
     elif opcion == 2:
-        print("Se elijio opcion 2")
+        iniciar_secion(usuarios)
+        print("Secion iniciada")      
     else:
         print("Se salio del sistema")
         continuar = False
