@@ -47,7 +47,7 @@ def buscar_usuario(lista:list, nombre:str, contra:str)->bool:
 
     return inicio
 
-def iniciar_secion(lista:list):
+def iniciar_sesion(lista:list):
     nombre = input("Ingrese su nombre: ")
     contraseña = input("Ingrese su contraseña: ")
     while buscar_usuario(lista, nombre, contraseña) != True:
