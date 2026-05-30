@@ -30,6 +30,17 @@ usuarios = [
     [29, "daniela@gmail.com", "da123", "jugador", "Daniela", "Quiroga", 27, "Argentina", 36119876, "2024-03-29", True],
     [30, "federico@gmail.com", "fe123", "jugador", "Federico", "Luna", 41, "Argentina", 28119876, "2024-03-30", True]
 ]
-
-# formato: [id, mail, password, rol, nombre, apellido, edad, nacionalidad, dni, fecha_registro, activo]
+"""
+[0] id
+[1] mail
+[2] password
+[3] rol
+[4] nombre
+[5] apellido
+[6] edad
+[7] nacionalidad
+[8] dni
+[9] fecha_registro
+[10] activo
+"""
 #
