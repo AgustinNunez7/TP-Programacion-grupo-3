@@ -21,7 +21,6 @@ def validar_dato_existente(dato:str, lista:list, indice:int) -> None:
     existe = False
     for i in range(len(lista)):
         if str(lista[i][indice]) == dato:
-            print("El dato ingresado ya existe. Intente nuevamente.")
             existe = True
             break
 
@@ -29,8 +28,11 @@ def validar_dato_existente(dato:str, lista:list, indice:int) -> None:
 
 def validar_que_sea_gmail(dato:str) -> bool:
     """Valida que el dato ingresado por el usuario sea un mail de gmail."""
+    while dato == "" or len(dato) < 11:
+        dato = input("El mail no puede estar vacio y debe ser un mail de gmail. Ingrese su email: ")
     es_gmail = True
     dato_validar = len(dato) - 10
+
     # Es lo unico que se me ocurrio para validar xd
     if dato[dato_validar+1] == "@":
         if dato[dato_validar+2] == "g":
@@ -52,6 +54,7 @@ def validar_que_sea_gmail(dato:str) -> bool:
 def validar_que_sea_letras(dato:str) -> bool:
     """Valida que el dato ingresado por el usuario sea solo letras."""
     es_letras = True
+
     for i in range(len(dato)):
         validar = ord(dato[i])
         if validar < 65 or validar > 122 or (validar > 90 and validar < 97):
@@ -61,17 +64,22 @@ def validar_que_sea_letras(dato:str) -> bool:
 
     return es_letras
 
-def validar_numero(dato : str):
+def validar_numero(dato : str) -> str:
     """Valida que el dato ingresado sea un numero y no este vacio."""
     while dato == "":
         dato = input("El dato ingresado esta vacio. Reingrese el dato: ")
-
-    validar = ord(dato[0])
-    while validar <= 44 or validar >= 58 or validar == 46 or validar == 47:
-        dato = input("El dato no es un numero. Reingrese el dato: ")
-        validar = ord(dato[0])
-        
+    es_numero = True
+    while es_numero:
+        for i in range(len(dato)):
+            validar = ord(dato[i])
+            if validar <= 44 or validar >= 58 or validar == 46 or validar == 47:
+                print("El dato ingresado debe contener solo numeros. Intente nuevamente.")
+                dato = input("Reingrese el dato: ")
+                validar = ord(dato[i])
+        es_numero = False
+    
     return dato
+        
 
 def registrar_usuario(lista : list) -> None:
     """Registra un nuevo usuario en el sistema."""
@@ -81,8 +89,8 @@ def registrar_usuario(lista : list) -> None:
     usuario_nuevo.append(id)
 
     email_ingresado = input("Ingrese su email: ")
-    while validar_dato_existente(email_ingresado, lista, 1) or len(email_ingresado) < 10 or not validar_que_sea_gmail(email_ingresado):
-        email_ingresado = input("Este mail ya está en uso o no es un mail de gmail. El mail no puede estar vacio. Ingrese otro: ")
+    while validar_dato_existente(email_ingresado, lista, 1) or not validar_que_sea_gmail(email_ingresado):
+        email_ingresado = input("El mail debe ser un mail de gmail y no puede estar vacio, y no puede estar en uso. Ingrese otro: ")
     usuario_nuevo.append(email_ingresado)
 
     contraseña_ingresada = input("Ingrese su contraseña: ")
@@ -103,31 +111,117 @@ def registrar_usuario(lista : list) -> None:
         apellido_ingresado = input("El apellido no puede estar vacio y debe contener solo letras. Ingrese su apellido: ")
     usuario_nuevo.append(apellido_ingresado)
 
-    edad_ingresada = int(validar_numero(input("Ingrese su edad (debe ser un numero mayor a 0): ")))
-    while edad_ingresada <= 0:
-        edad_ingresada = int(validar_numero(input("La edad debe ser un numero mayor a 0. Reingrese la edad: ")))
-    usuario_nuevo.append(edad_ingresada)
+    edad_ingresada = validar_numero(input("Ingrese su edad (debe ser un numero mayor a 0): "))
+    while int(edad_ingresada) <= 0:
+        edad_ingresada = validar_numero(input("La edad debe ser un numero mayor a 0. Reingrese la edad: "))
+    usuario_nuevo.append(int(edad_ingresada))
 
     nacionalidad_ingresada = input("Ingrese su nacionalidad: ")
     while nacionalidad_ingresada == "" or not validar_que_sea_letras(nacionalidad_ingresada):
         nacionalidad_ingresada = input("La nacionalidad no puede estar vacia y debe contener solo letras. Ingrese su nacionalidad: ")
     usuario_nuevo.append(nacionalidad_ingresada)
 
-    dni_ingresado = validar_numero(input("Ingrese su DNI (debe ser un numero): "))
-    while validar_dato_existente(dni_ingresado, lista, 8) or len(dni_ingresado) != 8:
-        dni_ingresado = validar_numero(input("Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. Ingrese otro: "))
-    usuario_nuevo.append(dni_ingresado)
+    dni_ingresado = input("Ingrese su DNI (debe ser un numero): ")
+    while validar_dato_existente(dni_ingresado, lista, 8) or len(dni_ingresado) != 8 or not validar_numero(dni_ingresado):
+        dni_ingresado = input("Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. Ingrese otro: ")
+    usuario_nuevo.append(int(dni_ingresado))
 
-    fecha_ingresada = input("Ingrese su fecha de registro (formato YYYY-MM-DD): ")
+    fecha_ingresada = validar_numero(input("Ingrese su fecha de registro (formato YYYY-MM-DD): "))
     while len(fecha_ingresada) != 10 or fecha_ingresada[4] != "-" or fecha_ingresada[7] != "-":
-        fecha_ingresada = input("El formato de la fecha no es válido. Ingrese su fecha de registro (formato YYYY-MM-DD): ")
+        fecha_ingresada = validar_numero(input("El formato de la fecha no es válido. Ingrese su fecha de registro (formato YYYY-MM-DD): "))
     usuario_nuevo.append(fecha_ingresada)
 
     usuario_nuevo.append(True)
 
 
+def iniciar_sesion(lista : list) -> list:
+    """Inicia sesion en el sistema."""
+    guardar_datos_usuario = []
+    email_ingresado = input("Ingrese su email: ")
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1):
+        email_ingresado = input("El mail no puede estar vacio y debe estar registrado. Ingrese su email: ")
 
+    contraseña_ingresada = input("Ingrese su contraseña: ")
+    while contraseña_ingresada == "" or not validar_dato_existente(contraseña_ingresada, lista, 2):
+        contraseña_ingresada = input("La contraseña es incorrecta y no puede estar vacia. Ingrese su contraseña: ")
+
+    usuario_encontrado = False
+    for i in range(len(lista)):
+        if lista[i][1] == email_ingresado and lista[i][2] == contraseña_ingresada:
+            usuario_encontrado = True
+            guardar_datos_usuario = lista[i]
+            if lista[i][3] == "jugador":
+                print(f"Bienvenido {lista[i][4]} {lista[i][5]}!")
+            elif lista[i][3] == "admin":
+                print(f"Bienvenido {lista[i][4]} {lista[i][5]}!")
+            break
+    if guardar_datos_usuario == []:
+        guardar_datos_usuario = ["invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", False]
+    
+    return list(guardar_datos_usuario)
 # formato: [id, mail, password, rol, nombre, apellido, edad, nacionalidad, dni, fecha_registro, activo]
+
+def ver_datos_personales(usuario : list) -> None:
+    """Muestra los datos personales del usuario logueado."""
+    print("|------------------ Datos personales ------------------|")
+    print(f"mail: {usuario[1]}\nnombre: {usuario[4]}\napellido: {usuario[5]}\nedad: {usuario[6]}\nnacionalidad: {usuario[7]}\ndni: {usuario[8]}\nfecha de registro: {usuario[9]}")
+
+def eliminar_usuario(lista : list) -> None:
+    """Elimina un usuario del sistema."""
+    email_ingresado = input("Ingrese el email del usuario que desea eliminar: ")
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1):
+        email_ingresado = input("El mail no puede estar vacio y debe estar registrado. Ingrese el email del usuario que desea eliminar: ")
+
+    for i in range(len(lista)):
+        if lista[i][1] == email_ingresado:
+            lista[i][10] = False
+            print(f"El usuario con email {email_ingresado} ha sido eliminado.")
+            break
+
+# def mostrar_todos_los_usuarios(lista : list) -> None:
+#     """Muestra el listado completo de usuarios registrados."""
+#     print("|------------------ Listado de usuarios ------------------|")
+#     for i in range(len(lista)):
+#         if lista[i][10] == True:
+#             print(f"mail: {lista[i][1]}\nnombre: {lista[i][4]}\napellido: {lista[i][5]}\nedad: {lista[i][6]}\nnacionalidad: {lista[i][7]}\ndni: {lista[i][8]}\nfecha de registro: {lista[i][9]}\n")
+
+def menu_jugador(usuario : list) -> None:
+    """Muestra el menu de opciones para el jugador."""
+    bandera_2 = True
+    while bandera_2:
+        mostrar_menu_jugador()
+        opcion = input("Seleccione una opcion (del 1 al 5): ")
+        match opcion:
+            case "1":
+                ver_datos_personales(usuario)
+            case "2":
+                print("Funcionalidad en construccion.")
+            case "3":
+                print("Funcionalidad en construccion.")
+            case "4":
+                print("Funcionalidad en construccion.")
+            case "5":
+                bandera_2 = False
+            case _:
+                print("Opcion no valida. Intente nuevamente.")
+
+def menu_admin() -> None:
+    """Muestra el menu de opciones para el administrador."""
+    bandera_3 = True
+    while bandera_3:
+        mostrar_menu_admin()
+        opcion = input("Seleccione una opcion (del 1 al 4): ")
+        match opcion:
+            case "1":
+                print("Funcionalidad en construccion.")
+            case "2":
+                print("Funcionalidad en construccion.")
+            case "3":
+                print("Funcionalidad en construccion.")
+            case "4":
+                bandera_3 = False
+            case _:
+                print("Opcion no valida. Intente nuevamente.")
 
 def main() -> None:
     """Funcion principal del programa."""
@@ -139,11 +233,19 @@ def main() -> None:
             case "1":
                 registrar_usuario(usuarios)
             case "2":
-                pass
+                data_usuario = iniciar_sesion(usuarios)
+                if data_usuario[3] == "jugador":
+                    menu_jugador(data_usuario)
+                elif data_usuario[3] == "admin":
+                    menu_admin()
+                else:
+                    print("No se pudo iniciar sesion. El email o la contraseña son incorrectos.")
             case "3":
                 bandera = False
             case _:
                 print("Opcion no valida. Intente nuevamente.")
+            
+
 
 
 # Consignas a implementar
