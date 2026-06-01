@@ -15,14 +15,69 @@ def mostrar_menu_admin() -> None:
     print("""\n|------------------ Menu de opciones ------------------|\n1) Ver estadisticas\n2) Modificar usuario\n3) Eliminar usuario\n4) Cerrar sesion\n 
     """)
 
-def validar_dato_existente(dato:str, lista:list, indice:int) -> None:
-    """Valida que el dato ingresado por el usuario no exista en la lista."""
+def mostrar_menu_estadisticas() -> None:
+    """Muestra el menu de opciones de las opcion Estadisticas."""
+    print("""\n|------------------ Estadisticas ------------------|\n1) Ver cantidad de usuarios registrados\n2) Ver todos los usuarios\n3) Buscar usuario por nombre\n4) Ver usuario de mayor edad\n5) Ver usuario de menor edad\n6) Volver\n
+    """)
+
+def buscar_dato(dato, lista:list, indice:int = -1)->int:
+    """Busca un dato en una lista y devuelve su indice.
+        Si no lo encuentra devuelve -1"""
+
+    indice_encontrado = -1
+    if indice != -1:
+        for i in range(len(lista)):
+            if str(lista[i][indice]) == dato:
+                indice_encontrado = i
+                break
+    else:
+        for i in range(len(lista)):
+            if str(lista[i]) == dato:
+                indice_encontrado = i
+                break
+    
+    return indice_encontrado
+
+def buscar_max(lista:list, indice:int)->int:
+    """Busca el numero mayor de una sublista por indice y devuelve su indice """
+
+    max = lista[0][indice]
+    indice_max = 0
+
+    for i in range(len(lista)):
+        if lista[i][indice] > max:
+            max = lista[i][indice]
+            indice_max = i
+    
+    return indice_max 
+
+def buscar_min(lista:list, indice:int)->int:
+    """Busca el numero menor de una sublista por indice y devuelve su indice """
+
+    min = lista[0][indice]
+    indice_min = 0
+
+    for i in range(len(lista)):
+        if lista[i][indice] < min:
+            min = lista[i][indice]
+            indice_min = i
+    
+    return indice_min 
+
+def validar_dato_existente(dato:str, lista:list, indice:int = -1) -> bool:
+    """Valida que el dato ingresado por el usuario exista en la lista."""
 
     existe = False
-    for i in range(len(lista)):
-        if str(lista[i][indice]) == dato:
-            existe = True
-            break
+    if indice != -1:
+        for i in range(len(lista)):
+            if str(lista[i][indice]) == dato:
+                existe = True
+                break
+    else:
+        for i in range(len(lista)):
+            if str(lista[i]) == dato:
+                existe = True
+                break
 
     return existe
 
@@ -30,26 +85,23 @@ def validar_que_sea_gmail(dato:str) -> bool:
     """Valida que el dato ingresado por el usuario sea un mail de gmail."""
     while dato == "" or len(dato) < 11:
         dato = input("El mail no puede estar vacio y debe ser un mail de gmail. Ingrese su email: ")
-    es_gmail = True
-    dato_validar = len(dato) - 10
+    es_mail = False
+    mail_excluido = "@"
 
-    # Es lo unico que se me ocurrio para validar xd
-    if dato[dato_validar+1] == "@":
-        if dato[dato_validar+2] == "g":
-            if dato[dato_validar+3] == "m":
-                if dato[dato_validar+4] == "a":
-                    if dato[dato_validar+5] == "i":
-                        if dato[dato_validar+6] == "l":
-                            if dato[dato_validar+6] == ".":
-                                if dato[dato_validar+7] == "c":
-                                    if dato[dato_validar+9] == "o":
-                                        if dato[dato_validar+10] == "m":
-                                            es_gmail = False
-    
-    return es_gmail
-    # if dato[dato_validar:] != "@gmail.com":
-    #     print("El mail ingresado no es un mail de gmail. Intente nuevamente.")
-    #     es_gmail = False
+    if validar_dato_existente("@", dato):
+        for i in range(len(dato)):
+            if dato[i] == "@":
+                indice_arroba = i
+                break
+
+        for i in range(indice_arroba+1, len(dato)):
+            mail_excluido += dato[i]
+
+        if mail_excluido == "@gmail.com" or mail_excluido == "@arcade.com":
+            es_mail = True
+
+    return es_mail
+
 
 def validar_que_sea_letras(dato:str) -> bool:
     """Valida que el dato ingresado por el usuario sea solo letras."""
@@ -90,7 +142,7 @@ def registrar_usuario(lista : list) -> None:
 
     email_ingresado = input("Ingrese su email: ")
     while validar_dato_existente(email_ingresado, lista, 1) or not validar_que_sea_gmail(email_ingresado):
-        email_ingresado = input("El mail debe ser un mail de gmail y no puede estar vacio, y no puede estar en uso. Ingrese otro: ")
+        email_ingresado = input("El mail debe ser un mail valido y no puede estar vacio, y no puede estar en uso. Ingrese otro: ")
     usuario_nuevo.append(email_ingresado)
 
     contraseña_ingresada = input("Ingrese su contraseña: ")
@@ -133,17 +185,19 @@ def registrar_usuario(lista : list) -> None:
 
     usuario_nuevo.append(True)
 
+    lista.append(usuario_nuevo)
+
 
 def iniciar_sesion(lista : list) -> list:
     """Inicia sesion en el sistema."""
     guardar_datos_usuario = []
     email_ingresado = input("Ingrese su email: ")
-    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1):
-        email_ingresado = input("El mail no puede estar vacio y debe estar registrado. Ingrese su email: ")
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado):
+        email_ingresado = input("El mail no puede estar vacio y debe ser valido. Ingrese su email: ")
 
     contraseña_ingresada = input("Ingrese su contraseña: ")
-    while contraseña_ingresada == "" or not validar_dato_existente(contraseña_ingresada, lista, 2):
-        contraseña_ingresada = input("La contraseña es incorrecta y no puede estar vacia. Ingrese su contraseña: ")
+    while contraseña_ingresada == "":
+        contraseña_ingresada = input("La contraseña no puede estar vacia. Ingrese su contraseña: ")
 
     usuario_encontrado = False
     for i in range(len(lista)):
@@ -178,12 +232,18 @@ def eliminar_usuario(lista : list) -> None:
             print(f"El usuario con email {email_ingresado} ha sido eliminado.")
             break
 
-# def mostrar_todos_los_usuarios(lista : list) -> None:
-#     """Muestra el listado completo de usuarios registrados."""
-#     print("|------------------ Listado de usuarios ------------------|")
-#     for i in range(len(lista)):
-#         if lista[i][10] == True:
-#             print(f"mail: {lista[i][1]}\nnombre: {lista[i][4]}\napellido: {lista[i][5]}\nedad: {lista[i][6]}\nnacionalidad: {lista[i][7]}\ndni: {lista[i][8]}\nfecha de registro: {lista[i][9]}\n")
+def mostrar_usuario(lista:list, indice:int)->None:
+    """Muestra los datos de un usuario registrado"""
+    if lista[indice][10] == True:
+        print(f"mail: {lista[indice][1]}\nnombre: {lista[indice][4]}\napellido: {lista[indice][5]}\nedad: {lista[indice][6]}\nnacionalidad: {lista[indice][7]}\ndni: {lista[indice][8]}\nfecha de registro: {lista[indice][9]}\n")
+
+def mostrar_todos_los_usuarios(lista : list) -> None:
+     """Muestra el listado completo de usuarios registrados."""
+     print("|------------------ Listado de usuarios ------------------|")
+     for i in range(len(lista)):
+        mostrar_usuario(lista, i)
+
+
 
 def menu_jugador(usuario : list) -> None:
     """Muestra el menu de opciones para el jugador."""
@@ -205,6 +265,38 @@ def menu_jugador(usuario : list) -> None:
             case _:
                 print("Opcion no valida. Intente nuevamente.")
 
+def menu_estadisticas():
+    """Muestra el menu de opciones de la opcion Ver estadiscticas."""
+    bandera_stat = True
+    while bandera_stat:
+        mostrar_menu_estadisticas()
+        opcion = input("Seleccione una opcion (del 1 al 6): ")
+        match opcion:
+            case "1":
+                print(f"Cantidad de usuarios: {len(usuarios)}.")
+            case "2":
+                mostrar_todos_los_usuarios(usuarios)
+            case "3":
+                usuario = input("Ingrese nombre de usuario a buscar: ")
+                while not validar_que_sea_letras(usuario):
+                    usuario = input("Nombre debe tener solo letras. Ingrese nuevamente: ")
+                indice_usuario = buscar_dato(usuario, usuarios, 4)
+                if indice_usuario != -1:
+                    print("Usuario encontrado\n")
+                    mostrar_usuario(usuarios, indice_usuario)
+                else:
+                    print("Usuario no encontrado")
+            case "4":
+                mayor = buscar_max(usuarios, 6)
+                mostrar_usuario(usuarios, mayor)
+            case "5":
+                menor = buscar_min(usuarios, 6)
+                mostrar_usuario(usuarios, menor)
+            case "6":
+                bandera_stat = False
+            case _:
+                print("Opcion no valida. Intente nuevamente.")
+
 def menu_admin() -> None:
     """Muestra el menu de opciones para el administrador."""
     bandera_3 = True
@@ -213,11 +305,11 @@ def menu_admin() -> None:
         opcion = input("Seleccione una opcion (del 1 al 4): ")
         match opcion:
             case "1":
-                print("Funcionalidad en construccion.")
+                menu_estadisticas()
             case "2":
                 print("Funcionalidad en construccion.")
             case "3":
-                print("Funcionalidad en construccion.")
+                eliminar_usuario(usuarios)
             case "4":
                 bandera_3 = False
             case _:
