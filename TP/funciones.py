@@ -283,10 +283,13 @@ def cantidad_total_usuarios(lista : list) -> int:
 
     return cantidad_usuarios
 
-def mostrar_cantidad_usuarios_mayores_de_edad(lista : list, edad_minima : int) -> None:
+def mostrar_cantidad_usuarios_mayores_de_edad(lista : list) -> None:
     """Muestra la cantidad de usuarios mayores de una edad determinada."""
     cantidad_usuarios_mayores = 0
-
+    edad_minima = validar_numero(input(f"Ingrese la edad minima para filtrar los usuarios (debe ser un numero mayor a 0): "))
+    while int(edad_minima) <= 0:
+        edad_minima = validar_numero(input(f"La edad minima debe ser un numero mayor a 0. Reingrese la edad minima para filtrar los usuarios: "))
+    
     for i in range(len(lista)):
         if lista[i][10] == True and lista[i][6] > edad_minima:
             cantidad_usuarios_mayores += 1
@@ -426,7 +429,7 @@ def menu_estadisticas() -> None:
             case "4":
                 print(f"La cantidad total de usuarios registrados es: {cantidad_total_usuarios(usuarios)}")
             case "5":
-                mostrar_cantidad_usuarios_mayores_de_edad(usuarios, 18)
+                mostrar_cantidad_usuarios_mayores_de_edad(usuarios)
             case "6":
                 busqueda_de_usuario_por_nombre(usuarios)
             case "7":
