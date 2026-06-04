@@ -17,8 +17,9 @@ def mostrar_menu_admin() -> None:
 
 def mostrar_menu_estadisticas() -> None:
     """Muestra el menu de opciones de las opcion Estadisticas."""
-    print("""\n|------------------ Estadisticas ------------------|\n1) Ver cantidad de usuarios registrados\n2) Ver todos los usuarios\n3) Buscar usuario por nombre\n4) Ver usuario de mayor edad\n5) Ver usuario de menor edad\n6) Volver\n
+    print("""\n|------------------ Estadisticas ------------------|\n1) Ver promedio de edad de los usuarios\n2) Ver el usuario mas joven\n3) Ver el usuario de mayor edad\n4) Ver cantidad de usuarios registrados\n5) Ver usuarios mayores a una edad ingresada\n6) Determinar si existe un usuario con un nombre específico\n7) Mostrar todos los usuarios\n8) Volver al menu anterior\n
     """)
+
 
 def buscar_dato(dato, lista:list, indice:int = -1)->int:
     """Busca un dato en una lista y devuelve su indice.
@@ -83,8 +84,6 @@ def validar_dato_existente(dato:str, lista:list, indice:int = -1) -> bool:
 
 def validar_que_sea_gmail(dato:str) -> bool:
     """Valida que el dato ingresado por el usuario sea un mail de gmail."""
-    while dato == "" or len(dato) < 11:
-        dato = input("El mail no puede estar vacio y debe ser un mail de gmail. Ingrese su email: ")
     es_mail = False
     mail_excluido = "@"
 
@@ -139,9 +138,8 @@ def registrar_usuario(lista : list) -> None:
 
     id = len(lista) + 1
     usuario_nuevo.append(id)
-
     email_ingresado = input("Ingrese su email: ")
-    while validar_dato_existente(email_ingresado, lista, 1) or not validar_que_sea_gmail(email_ingresado):
+    while validar_dato_existente(email_ingresado, lista, 1) or not validar_que_sea_gmail(email_ingresado) or email_ingresado == "" or len(email_ingresado) < 11:
         email_ingresado = input("El mail debe ser un mail valido y no puede estar vacio, y no puede estar en uso. Ingrese otro: ")
     usuario_nuevo.append(email_ingresado)
 
@@ -173,9 +171,9 @@ def registrar_usuario(lista : list) -> None:
         nacionalidad_ingresada = input("La nacionalidad no puede estar vacia y debe contener solo letras. Ingrese su nacionalidad: ")
     usuario_nuevo.append(nacionalidad_ingresada)
 
-    dni_ingresado = input("Ingrese su DNI (debe ser un numero): ")
-    while validar_dato_existente(dni_ingresado, lista, 8) or len(dni_ingresado) != 8 or not validar_numero(dni_ingresado):
-        dni_ingresado = input("Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. Ingrese otro: ")
+    dni_ingresado = validar_numero(input("Ingrese su DNI (debe ser un numero): "))
+    while validar_dato_existente(dni_ingresado, lista, 8) or len(dni_ingresado) != 8:
+        dni_ingresado = validar_numero(input("Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. Ingrese otro: "))
     usuario_nuevo.append(int(dni_ingresado))
 
     fecha_ingresada = validar_numero(input("Ingrese su fecha de registro (formato YYYY-MM-DD): "))
@@ -192,28 +190,25 @@ def iniciar_sesion(lista : list) -> list:
     """Inicia sesion en el sistema."""
     guardar_datos_usuario = []
     email_ingresado = input("Ingrese su email: ")
-    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado):
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or email_ingresado == "" or len(email_ingresado) < 11:
         email_ingresado = input("El mail no puede estar vacio y debe ser valido. Ingrese su email: ")
 
     contraseña_ingresada = input("Ingrese su contraseña: ")
     while contraseña_ingresada == "":
         contraseña_ingresada = input("La contraseña no puede estar vacia. Ingrese su contraseña: ")
 
-    usuario_encontrado = False
     for i in range(len(lista)):
         if lista[i][1] == email_ingresado and lista[i][2] == contraseña_ingresada:
-            usuario_encontrado = True
             guardar_datos_usuario = lista[i]
             if lista[i][3] == "jugador":
-                print(f"Bienvenido {lista[i][4]} {lista[i][5]}!")
+                print(f"Bienvenido jugador {lista[i][4]} {lista[i][5]}!")
             elif lista[i][3] == "admin":
-                print(f"Bienvenido {lista[i][4]} {lista[i][5]}!")
+                print(f"Bienvenido admin {lista[i][4]} {lista[i][5]}!")
             break
     if guardar_datos_usuario == []:
         guardar_datos_usuario = ["invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", False]
     
     return list(guardar_datos_usuario)
-# formato: [id, mail, password, rol, nombre, apellido, edad, nacionalidad, dni, fecha_registro, activo]
 
 def ver_datos_personales(usuario : list) -> None:
     """Muestra los datos personales del usuario logueado."""
@@ -223,7 +218,7 @@ def ver_datos_personales(usuario : list) -> None:
 def eliminar_usuario(lista : list) -> None:
     """Elimina un usuario del sistema."""
     email_ingresado = input("Ingrese el email del usuario que desea eliminar: ")
-    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1):
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1) or email_ingresado == "" or len(email_ingresado) < 11:
         email_ingresado = input("El mail no puede estar vacio y debe estar registrado. Ingrese el email del usuario que desea eliminar: ")
 
     for i in range(len(lista)):
@@ -238,12 +233,162 @@ def mostrar_usuario(lista:list, indice:int)->None:
         print(f"mail: {lista[indice][1]}\nnombre: {lista[indice][4]}\napellido: {lista[indice][5]}\nedad: {lista[indice][6]}\nnacionalidad: {lista[indice][7]}\ndni: {lista[indice][8]}\nfecha de registro: {lista[indice][9]}\n")
 
 def mostrar_todos_los_usuarios(lista : list) -> None:
-     """Muestra el listado completo de usuarios registrados."""
-     print("|------------------ Listado de usuarios ------------------|")
-     for i in range(len(lista)):
+    """Muestra el listado completo de usuarios registrados."""
+    print("|------------------ Listado de usuarios ------------------|")
+    for i in range(len(lista)):
         mostrar_usuario(lista, i)
 
+def promedio_edad(lista : list) -> float:
+    """Calcula el promedio de edad de los usuarios registrados."""
+    suma_edades = 0
+    cantidad_usuarios = 0
 
+    for i in range(len(lista)):
+        if lista[i][10] == True:
+            suma_edades += lista[i][6]
+            cantidad_usuarios += 1
+
+    if cantidad_usuarios > 0:
+        promedio = suma_edades / cantidad_usuarios
+    else:
+        promedio = 0
+
+    return promedio
+
+def buscar_menor_mayor(lista : list, indice:int, mayor_menor:str) -> None:
+    lista_usuario = []
+    mayor = 0
+    menor = 1000
+    
+    for i in range(len(lista)):
+        if lista[i][10] == True:
+            if mayor_menor == "mayor":
+                if lista[i][indice] > mayor:
+                    mayor = lista[i][indice]
+                    lista_usuario = (f"El usuario de mayor edad es: {lista[i][4]} {lista[i][5]}")
+            elif mayor_menor == "menor":
+                if lista[i][indice] < menor:
+                    menor = lista[i][indice]
+                    lista_usuario = (f"El usuario de menor edad es: {lista[i][4]} {lista[i][5]}")
+    print(lista_usuario)
+
+
+def cantidad_total_usuarios(lista : list) -> int:
+    """Calcula la cantidad total de usuarios registrados."""
+    cantidad_usuarios = 0
+
+    for i in range(len(lista)):
+        if lista[i][10] == True:
+            cantidad_usuarios += 1
+
+    return cantidad_usuarios
+
+def mostrar_cantidad_usuarios_mayores_de_edad(lista : list, edad_minima : int) -> None:
+    """Muestra la cantidad de usuarios mayores de una edad determinada."""
+    cantidad_usuarios_mayores = 0
+
+    for i in range(len(lista)):
+        if lista[i][10] == True and lista[i][6] > edad_minima:
+            cantidad_usuarios_mayores += 1
+
+    print(f"Cantidad de usuarios mayores de {edad_minima} años: {cantidad_usuarios_mayores}")
+
+def busqueda_de_usuario_por_nombre(lista : list) -> None:
+    """Determina si existe un usuario con un nombre específico (búsqueda)."""
+    usuarios_encontrados = []
+
+    nombre = input("Ingrese el nombre del usuario que desea buscar: ")
+    while nombre == "" or not validar_que_sea_letras(nombre):
+        nombre = input("El nombre no puede estar vacio y debe contener solo letras. Ingrese el nombre del usuario que desea buscar: ")
+
+    for i in range(len(lista)):
+        if lista[i][10] == True and lista[i][4] == nombre:
+            usuarios_encontrados.append(lista[i])
+
+    if len(usuarios_encontrados) > 0:
+        print(f"Usuarios encontrados con el nombre '{nombre}':")
+        for usuario in usuarios_encontrados:
+            print(f"id : {usuario[0]}\nmail: {usuario[1]}\nnombre: {usuario[4]}\napellido: {usuario[5]}\nedad: {usuario[6]}\nnacionalidad: {usuario[7]}\ndni: {usuario[8]}\nfecha de registro: {usuario[9]}\n")
+    else:
+        print(f"No se encontraron usuarios con el nombre '{nombre}'.")
+
+def validar_tipo_dato(dato: str):
+    """Valida que el tipo ingresado sea uno de los tipos de pokemon."""
+    lista_tipos = ["mail", "contraseña", "rol", "nombre", "apellido", "edad", "nacionalidad", "dni", "fecha de registro", "activo"]
+    for i in range(len(lista_tipos)):
+        if dato == lista_tipos[i]:
+            return False
+    return True
+
+def modificar_usuario(lista : list) -> None:
+    """Modifica los datos de un usuario existente."""
+    email_ingresado = input("Ingrese el email del usuario que desea modificar: ")
+    while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado) or not validar_dato_existente(email_ingresado, lista, 1) or email_ingresado == "" or len(email_ingresado) < 11:
+        email_ingresado = input("El mail no puede estar vacio y debe estar registrado. Ingrese el email del usuario que desea modificar: ")
+    
+    for i in range(len(lista)):
+        if lista[i][1] == email_ingresado:
+            print(f"Modifique uno de los siguientes datos: {lista[i][1]} - {lista[i][2]} - {lista[i][3]} - {lista[i][4]} - {lista[i][5]} - {lista[i][6]} - {lista[i][7]} - {lista[i][8]} - {lista[i][9]} - {lista[i][10]}")
+            break
+    dato_a_modificar = input("Ingrese el dato que desea modificar (nombre, apellido, edad o nacionalidad): ")
+    while validar_tipo_dato(dato_a_modificar):
+        dato_a_modificar = input("El dato ingresado no es valido. Ingrese el dato que desea modificar (nombre, apellido, edad o nacionalidad, todo excepto id): ")
+
+    for i in range(len(lista)):
+        if email_ingresado == lista[i][1]:
+            if dato_a_modificar == "mail":
+                nuevo_mail = input("Ingrese el nuevo mail: ")
+                while validar_dato_existente(nuevo_mail, lista, 1) or not validar_que_sea_gmail(nuevo_mail) or nuevo_mail == "" or len(nuevo_mail) < 11:
+                    nuevo_mail = input("El mail debe ser un mail valido y no puede estar vacio, y no puede estar en uso. Ingrese otro: ")
+                lista[i][1] = nuevo_mail
+            elif dato_a_modificar == "contraseña":
+                nueva_contraseña = input("Ingrese la nueva contraseña: ")
+                while len(nueva_contraseña) < 6 or len(nueva_contraseña) > 20:
+                    nueva_contraseña = input("La contraseña debe tener entre 6 y 20 caracteres. Ingrese otra: ")
+                lista[i][2] = nueva_contraseña
+            elif dato_a_modificar == "rol":
+                nuevo_rol = input("Ingrese el nuevo rol (admin o jugador): ")
+                while nuevo_rol != "admin" and nuevo_rol != "jugador":
+                    nuevo_rol = input("El rol debe ser 'admin' o 'jugador'. Ingrese el nuevo rol: ")
+                lista[i][3] = nuevo_rol
+            elif dato_a_modificar == "nombre":
+                nuevo_nombre = input("Ingrese el nuevo nombre: ")
+                while nuevo_nombre == "" or not validar_que_sea_letras(nuevo_nombre):
+                    nuevo_nombre = input("El nombre no puede estar vacio y debe contener solo letras. Ingrese el nuevo nombre: ")
+                lista[i][4] = nuevo_nombre
+            elif dato_a_modificar == "apellido":
+                nuevo_apellido = input("Ingrese el nuevo apellido: ")
+                while nuevo_apellido == "" or not validar_que_sea_letras(nuevo_apellido):
+                    nuevo_apellido = input("El apellido no puede estar vacio y debe contener solo letras. Ingrese el nuevo apellido: ")
+                lista[i][5] = nuevo_apellido
+            elif dato_a_modificar == "edad":
+                nueva_edad = validar_numero(input("Ingrese la nueva edad (debe ser un numero mayor a 0): "))
+                while int(nueva_edad) <= 0:
+                    nueva_edad = validar_numero(input("La edad debe ser un numero mayor a 0. Reingrese la nueva edad: "))
+                lista[i][6] = int(nueva_edad)
+            elif dato_a_modificar == "nacionalidad":
+                nueva_nacionalidad = input("Ingrese la nueva nacionalidad: ")
+                while nueva_nacionalidad == "" or not validar_que_sea_letras(nueva_nacionalidad):
+                    nueva_nacionalidad = input("La nacionalidad no puede estar vacia y debe contener solo letras. Ingrese la nueva nacionalidad: ")
+                lista[i][7] = nueva_nacionalidad
+            elif dato_a_modificar == "dni":
+                nuevo_dni = validar_numero(input("Ingrese el nuevo DNI (debe ser un numero): "))
+                while validar_dato_existente(nuevo_dni, lista, 8) or len(nuevo_dni) != 8:
+                    nuevo_dni = validar_numero(input("Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. Ingrese otro: "))
+                lista[i][8] = int(nuevo_dni)
+            elif dato_a_modificar == "fecha de registro":
+                nueva_fecha = validar_numero(input("Ingrese la nueva fecha de registro (formato YYYY-MM-DD): "))
+                while len(nueva_fecha) != 10 or nueva_fecha[4] != "-" or nueva_fecha[7] != "-":
+                    nueva_fecha = validar_numero(input("El formato de la fecha no es válido. Ingrese la nueva fecha de registro (formato YYYY-MM-DD): "))
+                lista[i][9] = nueva_fecha
+            elif dato_a_modificar == "activo":
+                nuevo_activo = input("Ingrese el nuevo estado de activo (True o False): ")
+                while nuevo_activo != "True" and nuevo_activo != "False":
+                    nuevo_activo = input("El estado de activo debe ser 'True' o 'False'. Ingrese el nuevo estado de activo: ")
+                nuevo_activo = bool(nuevo_activo)
+                lista[i][10] = nuevo_activo
+            print(f"El usuario con email {email_ingresado} ha sido modificado.")
+            break
 
 def menu_jugador(usuario : list) -> None:
     """Muestra el menu de opciones para el jugador."""
@@ -265,7 +410,7 @@ def menu_jugador(usuario : list) -> None:
             case _:
                 print("Opcion no valida. Intente nuevamente.")
 
-def menu_estadisticas():
+def menu_estadisticas() -> None:
     """Muestra el menu de opciones de la opcion Ver estadiscticas."""
     bandera_stat = True
     while bandera_stat:
@@ -273,26 +418,20 @@ def menu_estadisticas():
         opcion = input("Seleccione una opcion (del 1 al 6): ")
         match opcion:
             case "1":
-                print(f"Cantidad de usuarios: {len(usuarios)}.")
+                print(promedio_edad(usuarios))
             case "2":
-                mostrar_todos_los_usuarios(usuarios)
+                buscar_menor_mayor(usuarios, 6, "mayor")
             case "3":
-                usuario = input("Ingrese nombre de usuario a buscar: ")
-                while not validar_que_sea_letras(usuario):
-                    usuario = input("Nombre debe tener solo letras. Ingrese nuevamente: ")
-                indice_usuario = buscar_dato(usuario, usuarios, 4)
-                if indice_usuario != -1:
-                    print("Usuario encontrado\n")
-                    mostrar_usuario(usuarios, indice_usuario)
-                else:
-                    print("Usuario no encontrado")
+                buscar_menor_mayor(usuarios, 6, "menor")
             case "4":
-                mayor = buscar_max(usuarios, 6)
-                mostrar_usuario(usuarios, mayor)
+                print(f"La cantidad total de usuarios registrados es: {cantidad_total_usuarios(usuarios)}")
             case "5":
-                menor = buscar_min(usuarios, 6)
-                mostrar_usuario(usuarios, menor)
+                mostrar_cantidad_usuarios_mayores_de_edad(usuarios, 18)
             case "6":
+                busqueda_de_usuario_por_nombre(usuarios)
+            case "7":
+                mostrar_todos_los_usuarios(usuarios)
+            case "8":
                 bandera_stat = False
             case _:
                 print("Opcion no valida. Intente nuevamente.")
@@ -307,7 +446,7 @@ def menu_admin() -> None:
             case "1":
                 menu_estadisticas()
             case "2":
-                print("Funcionalidad en construccion.")
+                modificar_usuario(usuarios)
             case "3":
                 eliminar_usuario(usuarios)
             case "4":
@@ -336,61 +475,3 @@ def main() -> None:
                 bandera = False
             case _:
                 print("Opcion no valida. Intente nuevamente.")
-            
-
-
-
-# Consignas a implementar
-# Sistema de acceso
-# El sistema deberá contar con un menú principal que aparezca apenas se
-# inicia y permita:
-# 1. Registrarse como nuevo usuario
-# 2. Iniciar sesión
-# 3. Salir del sistema
-# Usuarios de sistema y sus menu
-# Usuario final (jugador):
-# Una vez iniciada la sesión como jugador, el sistema deberá mostrar un menú
-# con las siguientes opciones:
-# 1. Ver datos personales
-# 2. Jugar juego 1
-# 3. Jugar juego 2
-# 4. Ver puntajes
-# 5. Cerrar sesión
-# Consideraciones:
-# ● En este sprint no es necesario implementar la lógica de los juegos ni de los puntajes.
-# Las opciones correspondientes pueden mostrarse como funcionalidades en
-# construcción o devolver valores simulados.
-# ● La opción “Ver datos personales” deberá mostrar la información del usuario
-# actualmente logueado (por ejemplo: nombre, edad, identificador).
-# Usuario administrador:
-# Una vez iniciada la sesión como administrador, el sistema deberá mostrar un
-# menú con las siguientes opciones:
-# 1. Ver estadísticas
-# 2. Modificar usuario
-# 3. Eliminar usuario
-# 4. Cerrar sesión
-# Submenú de estadísticas
-# La opción “Ver estadísticas” deberá dirigir a un submenú donde se
-# implementan al menos cinco de las siguientes consultas sobre los usuarios
-# registrados:
-# ● Obtener el promedio de edad de los usuarios
-# ● Determinar el usuario más joven
-# ● Determinar el usuario de mayor edad
-# ● Calcular la cantidad total de usuarios registrados
-# ● Mostrar la cantidad de usuarios mayores de una edad determinada (por
-# ejemplo, mayores de 18 años)
-# ● Determinar si existe un usuario con un nombre específico (búsqueda)
-# ● Mostrar el listado completo de usuarios
-# ● 3 estadísticas más pensadas por ustedes
-# Gestión de usuarios
-# El administrador deberá poder:
-# ● Modificar los datos de un usuario existente (por ejemplo: nombre o
-# edad)
-# ● Eliminar un usuario del sistema
-# Temas evaluados
-# ● Entradas y salidas
-# ● Condicionales simples, compuestos, anidados
-# ● Estructuras iterativas (while, for)
-# ● Funciones; funciones recursivas
-# ● Listas
-# ● Organización del código (módulos y paquetes)
