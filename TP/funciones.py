@@ -39,32 +39,6 @@ def buscar_dato(dato, lista:list, indice:int = -1)->int:
     
     return indice_encontrado
 
-def buscar_max(lista:list, indice:int)->int:
-    """Busca el numero mayor de una sublista por indice y devuelve su indice """
-
-    max = lista[0][indice]
-    indice_max = 0
-
-    for i in range(len(lista)):
-        if lista[i][indice] > max:
-            max = lista[i][indice]
-            indice_max = i
-    
-    return indice_max 
-
-def buscar_min(lista:list, indice:int)->int:
-    """Busca el numero menor de una sublista por indice y devuelve su indice """
-
-    min = lista[0][indice]
-    indice_min = 0
-
-    for i in range(len(lista)):
-        if lista[i][indice] < min:
-            min = lista[i][indice]
-            indice_min = i
-    
-    return indice_min 
-
 def validar_dato_existente(dato:str, lista:list, indice:int = -1) -> bool:
     """Valida que el dato ingresado por el usuario exista en la lista."""
 
