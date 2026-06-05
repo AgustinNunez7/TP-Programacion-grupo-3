@@ -100,7 +100,7 @@ def validar_numero(dato : str) -> str:
             if validar <= 44 or validar >= 58 or validar == 46 or validar == 47:
                 print("El dato ingresado debe contener solo numeros. Intente nuevamente.")
                 dato = input("Reingrese el dato: ")
-                validar = ord(dato[i])
+                break
         es_numero = False
     
     return dato
@@ -197,8 +197,8 @@ def eliminar_usuario(lista : list) -> None:
 
     for i in range(len(lista)):
         if lista[i][1] == email_ingresado:
-            lista[i][10] = False
             print(f"El usuario con email {email_ingresado} ha sido eliminado.")
+            lista.pop(i)
             break
 
 def mostrar_usuario(lista:list, indice:int)->None:
@@ -261,6 +261,8 @@ def mostrar_cantidad_usuarios_mayores_de_edad(lista : list) -> None:
     """Muestra la cantidad de usuarios mayores de una edad determinada."""
     cantidad_usuarios_mayores = 0
     edad_minima = validar_numero(input(f"Ingrese la edad minima para filtrar los usuarios (debe ser un numero mayor a 0): "))
+    edad_minima = int(edad_minima)
+    
     while int(edad_minima) <= 0:
         edad_minima = validar_numero(input(f"La edad minima debe ser un numero mayor a 0. Reingrese la edad minima para filtrar los usuarios: "))
     
