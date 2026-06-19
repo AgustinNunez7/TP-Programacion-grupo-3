@@ -1,3 +1,3 @@
-from funciones import *
+from menus import main
 
 main()
