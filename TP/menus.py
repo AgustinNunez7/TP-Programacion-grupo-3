@@ -1,7 +1,7 @@
 from validaciones import *
 from informacion import *
 from usuarios import usuarios
-from gestion_usuarios import *
+from gestion_listas import *
 
 def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
     menu = ""
@@ -41,7 +41,7 @@ def menu_estadisticas() -> None:
                      "Ver cantidad de usuarios registrados", "Ver usuarios mayores a una edad ingresada", 
                      "Determinar si existe un usuario con un nombre específico", "Mostrar todos los usuarios", "Volver al menu anterior"]
         mostrar_menu_opciones("Estadisticas", opciones)
-        opcion = input("Seleccione una opcion (del 1 al 6): ")
+        opcion = input("Seleccione una opcion (del 1 al 8): ")
         match opcion:
             case "1":
                 print(promedio_lista(usuarios, 6))
@@ -100,8 +100,8 @@ def main() -> None:
                     elif usuarios[data_usuario][3] == "admin":
                         print(f"Bienvenido/a admin {usuarios[data_usuario][4]} {usuarios[data_usuario][5]}!")
                         menu_admin()
-                    else:
-                        print("No se pudo iniciar sesion. El email o la contraseña son incorrectos.")
+                else:
+                    print("No se pudo iniciar sesion. El email o la contraseña son incorrectos.")
             case "3":
                 bandera = False
                 print("Se salio del sistema")

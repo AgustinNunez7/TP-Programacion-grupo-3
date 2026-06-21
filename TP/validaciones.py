@@ -79,4 +79,67 @@ def validar_tipo_dato(dato:str, opciones:list) -> bool:
     for i in range(len(opciones)):
         if dato == opciones[i]:
             opcion_valida = True
+    
     return opcion_valida
+
+def pedir_email(lista:list, indice:int, mensaje:str)-> str:
+    email_ingresado = input(mensaje)
+    while validar_dato_existente(email_ingresado, lista, indice) or not validar_que_sea_gmail(email_ingresado) or email_ingresado == "":
+        email_ingresado = input(f"El mail debe ser un mail valido, no puede estar vacio y no puede estar en uso.\n{mensaje}")
+    
+    return email_ingresado
+
+def pedir_mail_existente(lista:list, indice:int, mensaje:str)->str:
+    email_ingresado = input(mensaje)
+    while not validar_dato_existente(email_ingresado, lista, indice) or not validar_que_sea_gmail(email_ingresado) or email_ingresado == "":
+        email_ingresado = input(f"El mail debe ser un mail valido, no puede estar vacio y debe estar registrado. \n{mensaje}: ")
+    
+    return email_ingresado
+
+def pedir_longitud_definida(min:int, max:int, mensaje:str)->str:
+    dato_ingresado = input(mensaje)
+    while not validar_rango(len(dato_ingresado), min, max):
+        dato_ingresado = input(f"Debe tener entre {min} y {max} caracteres. {mensaje}: ")
+    
+    return dato_ingresado
+
+def pedir_solo_letras(mensaje:str)->str:
+    dato_ingresado = input(mensaje)
+    while dato_ingresado == "" or not validar_que_sea_letras(dato_ingresado):
+        dato_ingresado = input(f"No puede estar vacio y debe contener solo letras. Ingrese su {mensaje}: ")
+    return dato_ingresado
+
+def pedir_mayor_a(min:int, mensaje:str)->int:
+    numero_ingresado = input(f"{mensaje} (debe ser un numero mayor a {min}): ")
+    while not validar_mayor_a(numero_ingresado, 0):
+        numero_ingresado = input(f"Debe ser un numero mayor a {min}. {mensaje}: ")
+    
+    return int(numero_ingresado)
+
+def pedir_dni(lista:list, indice:int, mensaje:str)->int:
+    dni_ingresado = input(mensaje)
+    while validar_dato_existente(dni_ingresado, lista, indice) or len(dni_ingresado) != 8 or not validar_numero(dni_ingresado):
+        dni_ingresado = input(f"Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. \n{mensaje}: ")
+    
+    return int(dni_ingresado)
+
+def pedir_fecha(mensaje:str)->str:    
+    fecha_ingresada = input(mensaje)
+    while len(fecha_ingresada) != 10 or fecha_ingresada[4] != "-" or fecha_ingresada[7] != "-" or not validar_numero(fecha_ingresada):
+        fecha_ingresada = input(f"El formato de la fecha no es válido. {mensaje}: ")
+    
+    return fecha_ingresada
+
+def pedir_opciones(opciones:list, mensaje:str)->str:
+    opciones_mensaje = ""
+    for i in range(len(opciones)):
+        opciones_mensaje += opciones[i]
+        if i + 1 != len(opciones):
+            opciones_mensaje += ","
+
+    dato_ingresado = input(f"{mensaje} \n({opciones_mensaje}): ")
+    while not validar_tipo_dato(dato_ingresado, opciones):
+        dato_ingresado = input(f"{mensaje} \n({opciones_mensaje})")
+    
+    return dato_ingresado
+
