@@ -2,6 +2,7 @@ from validaciones import *
 from informacion import *
 from usuarios import usuarios
 from gestion_listas import *
+from juego.preguntados import jugar_preguntados
 
 def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
     menu = ""
@@ -23,7 +24,7 @@ def menu_jugador(usuario:int) -> None:
                 print("|------------------ Datos personales ------------------|")
                 mostrar_usuario(usuarios, usuario)
             case "2":
-                print("Funcionalidad en construccion.")
+                jugar_preguntados()
             case "3":
                 print("Funcionalidad en construccion.")
             case "4":
