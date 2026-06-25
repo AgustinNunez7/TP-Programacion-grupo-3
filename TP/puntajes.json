@@ -1,0 +1,16 @@
+[
+    {
+        "usuario_id": 2,
+        "nombre": "Juan",
+        "email": "juan@gmail.com",
+        "juego": "preguntados",
+        "puntaje": 30
+    },
+    {
+        "usuario_id": 9,
+        "nombre": "Diego",
+        "email": "diego@gmail.com",
+        "juego": "preguntados",
+        "puntaje": 40
+    }
+]

@@ -1,4 +1,5 @@
 from validaciones import validar_numero, validar_que_sea_letras, validar_mayor_a
+from persistencia import cargar_datos
 
 def mostrar_usuario(lista:list, indice:int)->None:
     """Muestra los datos de un usuario registrado"""
@@ -83,6 +84,41 @@ def busqueda_de_usuario_por_nombre(lista : list) -> None:
     if len(usuarios_encontrados) > 0:
         print(f"Usuarios encontrados con el nombre '{nombre}':")
         for usuario in usuarios_encontrados:
-           mostrar_usuario(lista, usuario)
+            mostrar_usuario(lista, usuario)
     else:
         print(f"No se encontraron usuarios con el nombre '{nombre}'.")
+
+def ver_top_10_puntajes() -> None:
+    """Muestra los 10 mayores puntajes ordenados de mayor a menor usando burbujeo."""
+    puntajes = cargar_datos("TP/puntajes.json")
+    
+    if len(puntajes) == 0:
+        print("\n|------------------ Ver Puntajes ------------------|")
+        print("No hay puntajes registrados aun.\n")
+        return
+    
+    # Ordenar por burbujeo (de mayor a menor)
+    for i in range(len(puntajes)):
+        for j in range(len(puntajes) - 1 - i):
+            if puntajes[j]["puntaje"] < puntajes[j + 1]["puntaje"]:
+                # Intercambiar
+                temp = puntajes[j]
+                puntajes[j] = puntajes[j + 1]
+                puntajes[j + 1] = temp
+    
+    # Mostrar top 10
+    print("\n|------------------ Top 10 Puntajes ------------------|")
+    print(f"{'Posicion':<15} {'Nombre':<20} {'Puntaje':<10}")
+    print("-" * 60)
+    
+    cantidad = len(puntajes)
+    if cantidad > 10:
+        cantidad = 10
+    
+    for i in range(cantidad):
+        posicion = i + 1
+        nombre = puntajes[i]["nombre"]
+        puntaje = puntajes[i]["puntaje"]
+        print(f"{posicion:<15} {nombre:<20} {puntaje:<10}")
+    
+    print("-" * 60 + "\n")

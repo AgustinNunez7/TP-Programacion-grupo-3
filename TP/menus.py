@@ -1,8 +1,8 @@
 from validaciones import *
 from informacion import *
-from usuarios import usuarios
 from gestion_listas import *
-from juego.preguntados import jugar_preguntados
+from preguntados import jugar_preguntados
+from persistencia import cargar_datos
 
 def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
     menu = ""
@@ -12,7 +12,42 @@ def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
 
     print(menu)
 
-def menu_jugador(usuario:int) -> None:
+def ver_top_10_puntajes() -> None:
+    """Muestra los 10 mayores puntajes ordenados de mayor a menor usando burbujeo."""
+    puntajes = cargar_datos("TP/puntajes.json")
+    
+    if len(puntajes) == 0:
+        print("\n|------------------ Ver Puntajes ------------------|")
+        print("No hay puntajes registrados aun.\n")
+        return
+    
+    # Ordenar por burbujeo (de mayor a menor)
+    for i in range(len(puntajes)):
+        for j in range(len(puntajes) - 1 - i):
+            if puntajes[j]["puntaje"] < puntajes[j + 1]["puntaje"]:
+                # Intercambiar
+                temp = puntajes[j]
+                puntajes[j] = puntajes[j + 1]
+                puntajes[j + 1] = temp
+    
+    # Mostrar top 10
+    print("\n|------------------ Top 10 Puntajes ------------------|")
+    print(f"{'Posicion':<10} {'Nombre':<20} {'Puntaje':<10}")
+    print("-" * 60)
+    
+    cantidad = len(puntajes)
+    if cantidad > 10:
+        cantidad = 10
+    
+    for i in range(cantidad):
+        posicion = i + 1
+        nombre = puntajes[i]["nombre"]
+        puntaje = puntajes[i]["puntaje"]
+        print(f"{posicion:<10} {nombre:<20} {puntaje:<10}")
+    
+    print("-" * 60 + "\n")
+
+def menu_jugador(usuario:int, usuarios:list) -> None:
     """Muestra el menu de opciones para el jugador."""
     bandera_2 = True
     while bandera_2:
@@ -24,17 +59,20 @@ def menu_jugador(usuario:int) -> None:
                 print("|------------------ Datos personales ------------------|")
                 mostrar_usuario(usuarios, usuario)
             case "2":
-                jugar_preguntados()
+                usuario_id = usuarios[usuario][0]
+                usuario_nombre = usuarios[usuario][4]
+                usuario_email = usuarios[usuario][1]
+                jugar_preguntados(usuario_id, usuario_nombre, usuario_email)
             case "3":
                 print("Funcionalidad en construccion.")
             case "4":
-                print("Funcionalidad en construccion.")
+                ver_top_10_puntajes()
             case "5":
                 bandera_2 = False
             case _:
                 print("Opcion no valida. Intente nuevamente.")
 
-def menu_estadisticas() -> None:
+def menu_estadisticas(usuarios:list) -> None:
     """Muestra el menu de opciones de la opcion Ver estadiscticas."""
     bandera_stat = True
     while bandera_stat:
@@ -63,7 +101,7 @@ def menu_estadisticas() -> None:
             case _:
                 print("Opcion no valida. Intente nuevamente.")
 
-def menu_admin() -> None:
+def menu_admin(usuarios:list) -> None:
     """Muestra el menu de opciones para el administrador."""
     bandera_3 = True
     while bandera_3:
@@ -72,7 +110,7 @@ def menu_admin() -> None:
         opcion = input("Seleccione una opcion (del 1 al 4): ")
         match opcion:
             case "1":
-                menu_estadisticas()
+                menu_estadisticas(usuarios)
             case "2":
                 modificar_usuario(usuarios)
             case "3":
@@ -84,6 +122,8 @@ def menu_admin() -> None:
 
 def main() -> None:
     """Funcion principal del programa."""
+    usuarios = cargar_datos("TP/usuarios.json")
+    
     bandera = True
     while bandera:
         opciones = ["Registrarse como nuevo usuario", "Iniciar sesion", "Salir del sistema"]
@@ -97,10 +137,10 @@ def main() -> None:
                 if data_usuario != -1:
                     if usuarios[data_usuario][3] == "jugador":
                         print(f"Bienvenido/a jugador {usuarios[data_usuario][4]} {usuarios[data_usuario][5]}!")
-                        menu_jugador(data_usuario)
+                        menu_jugador(data_usuario, usuarios)
                     elif usuarios[data_usuario][3] == "admin":
                         print(f"Bienvenido/a admin {usuarios[data_usuario][4]} {usuarios[data_usuario][5]}!")
-                        menu_admin()
+                        menu_admin(usuarios)
                 else:
                     print("No se pudo iniciar sesion. El email o la contraseña son incorrectos.")
             case "3":

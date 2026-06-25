@@ -1,6 +1,7 @@
 from validaciones import *
 from informacion import mostrar_todos_los_usuarios
 from usuarios import usuarios
+from persistencia import guardar_datos
 
 def registrar_usuario(lista : list) -> None:
     """Registra un nuevo usuario en el sistema."""
@@ -9,10 +10,10 @@ def registrar_usuario(lista : list) -> None:
     id = len(lista) + 1
     usuario_nuevo.append(id)
 
-    email_ingresado = pedir_email(lista, 1)    
+    email_ingresado = pedir_email(lista, 1, "Ingrese un mail (no registrado antes): ")    
     usuario_nuevo.append(email_ingresado)
 
-    contraseña_ingresada = pedir_longitud_definida(6, 20, "Ingrese su contraseña: ")
+    contraseña_ingresada = pedir_longitud_definida(3, 20, "Ingrese su contraseña: ")
     usuario_nuevo.append(contraseña_ingresada)
 
     rol = "jugador"
@@ -21,16 +22,16 @@ def registrar_usuario(lista : list) -> None:
     nombre_ingresado = pedir_solo_letras("Ingrese su nombre: ")   
     usuario_nuevo.append(nombre_ingresado)
 
-    apellido_ingresado = pedir_solo_letras("Ingrese su apellido")    
+    apellido_ingresado = pedir_solo_letras("Ingrese su apellido: ")    
     usuario_nuevo.append(apellido_ingresado)
 
-    edad_ingresada = pedir_mayor_a(0, "Ingrese su edad") 
+    edad_ingresada = pedir_mayor_a(0, "Ingrese su edad: ") 
     usuario_nuevo.append(edad_ingresada)
 
-    nacionalidad_ingresada = pedir_solo_letras("Ingrese su nacionalidad")    
+    nacionalidad_ingresada = pedir_solo_letras("Ingrese su nacionalidad: ")    
     usuario_nuevo.append(nacionalidad_ingresada)
 
-    dni_ingresado = pedir_dni(lista, 8, "Ingrese su dni")    
+    dni_ingresado = pedir_dni(lista, 8, "Ingrese su dni: ")    
     usuario_nuevo.append(dni_ingresado)
 
     fecha_ingresada = pedir_fecha("Ingrese su fecha de registro (formato YYYY-MM-DD): ")    
@@ -39,6 +40,7 @@ def registrar_usuario(lista : list) -> None:
     usuario_nuevo.append(True)
 
     lista.append(usuario_nuevo)
+    guardar_datos("TP/usuarios.json", lista)
 
 def eliminar_usuario(lista : list) -> None:
     """Elimina un usuario del sistema."""
@@ -48,6 +50,7 @@ def eliminar_usuario(lista : list) -> None:
         if lista[i][1] == email_ingresado:
             print(f"El usuario con email {email_ingresado} ha sido eliminado.")
             lista[i][10] = False
+            guardar_datos("TP/usuarios.json", lista)
             break
 
 
@@ -58,7 +61,7 @@ def iniciar_sesion(lista : list) -> list:
     while email_ingresado == "" or not validar_que_sea_gmail(email_ingresado):
         email_ingresado = input("El mail no puede estar vacio y debe ser valido. Ingrese su email: ")
 
-    contraseña_ingresada = pedir_longitud_definida(6, 20, "Ingrese su contraseña: ")
+    contraseña_ingresada = pedir_longitud_definida(1, 20, "Ingrese su contraseña: ")
 
     for i in range(len(lista)):
         if lista[i][1] == email_ingresado and lista[i][2] == contraseña_ingresada:
@@ -69,7 +72,7 @@ def iniciar_sesion(lista : list) -> list:
 
 def modificar_usuario(lista : list) -> None:
     """Modifica los datos de un usuario existente."""
-    mostrar_todos_los_usuarios(usuarios)
+    mostrar_todos_los_usuarios(lista)
     email_ingresado = pedir_mail_existente(lista, 1, "Ingrese el email del usuario que desea modificar: ")
 
     for i in range(len(lista)):
@@ -124,6 +127,7 @@ def modificar_usuario(lista : list) -> None:
                 lista[i][10] = nuevo_activo
             
             print(f"El usuario con email {email_ingresado} ha sido modificado.")
+            guardar_datos("TP/usuarios.json", lista)
             break
 
 def pasar_dict(lista:list, keys:list):

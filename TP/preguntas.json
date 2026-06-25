@@ -1,0 +1,92 @@
+[   
+    {
+        "pregunta": "¿Cuál es el planeta más cercano al Sol?",
+        "opciones": ["Venus", "Mercurio", "Marte", "Júpiter"],
+        "respuesta": 2,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Cuánto es 12 x 12?",
+        "opciones": ["124", "144", "132", "156"],
+        "respuesta": 1,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Quién escribió Don Quijote de la Mancha?",
+        "opciones": ["Miguel de Cervantes", "Pablo Neruda", "Julio Cortázar", "Jorge Luis Borges"],
+        "respuesta": 0,
+        "puntaje": 15
+    },
+    {
+        "pregunta": "¿Cuál es el océano más grande del mundo?",
+        "opciones": ["Atlántico", "Índico", "Ártico", "Pacífico"],
+        "respuesta": 3,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Cuántos continentes hay en la Tierra?",
+        "opciones": ["5", "6", "7", "8"],
+        "respuesta": 2,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Qué lenguaje se utiliza principalmente para ciencia de datos?",
+        "opciones": ["Python", "HTML", "CSS", "SQL"],
+        "respuesta": 0,
+        "puntaje": 15
+    },
+    {
+        "pregunta": "¿Cuál es el resultado de 15 + 27?",
+        "opciones": ["42", "41", "43", "44"],
+        "respuesta": 0,
+        "puntaje": 5
+    },
+    {
+        "pregunta": "¿Cuál es la capital de Brasil?",
+        "opciones": ["Río de Janeiro", "São Paulo", "Brasilia", "Salvador"],
+        "respuesta": 2,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Qué gas respiramos principalmente para vivir?",
+        "opciones": ["Hidrógeno", "Oxígeno", "Nitrógeno", "Helio"],
+        "respuesta": 1,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Cuántos lados tiene un hexágono?",
+        "opciones": ["5", "6", "7", "8"],
+        "respuesta": 1,
+        "puntaje": 5
+    },
+    {
+        "pregunta": "¿Cuál es el símbolo químico del agua?",
+        "opciones": ["O2", "CO2", "H2O", "NaCl"],
+        "respuesta": 2,
+        "puntaje": 10
+    },
+    {
+        "pregunta": "¿Quién pintó la Mona Lisa?",
+        "opciones": ["Van Gogh", "Leonardo da Vinci", "Picasso", "Miguel Ángel"],
+        "respuesta": 1,
+        "puntaje": 15
+    },
+    {
+        "pregunta": "¿Qué país ganó el Mundial de Fútbol 2022?",
+        "opciones": ["Francia", "Brasil", "Alemania", "Argentina"],
+        "respuesta": 3,
+        "puntaje": 20
+    },
+    {
+        "pregunta": "¿Cuál es el lenguaje de programación creado por Guido van Rossum?",
+        "opciones": ["Java", "Python", "C++", "Ruby"],
+        "respuesta": 1,
+        "puntaje": 15
+    },
+    {
+        "pregunta": "¿Cuántos días tiene un año bisiesto?",
+        "opciones": ["364", "365", "366", "367"],
+        "respuesta": 2,
+        "puntaje": 10
+    }  
+]
