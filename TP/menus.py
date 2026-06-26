@@ -13,40 +13,6 @@ def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
 
     print(menu)
 
-def ver_top_10_puntajes() -> None:
-    """Muestra los 10 mayores puntajes ordenados de mayor a menor usando burbujeo."""
-    puntajes = cargar_datos("TP/puntajes.json")
-    
-    if len(puntajes) == 0:
-        print("\n|------------------ Ver Puntajes ------------------|")
-        print("No hay puntajes registrados aun.\n")
-        return
-    
-    # Ordenar por burbujeo (de mayor a menor)
-    for i in range(len(puntajes)):
-        for j in range(len(puntajes) - 1 - i):
-            if puntajes[j]["puntaje"] < puntajes[j + 1]["puntaje"]:
-                # Intercambiar
-                temp = puntajes[j]
-                puntajes[j] = puntajes[j + 1]
-                puntajes[j + 1] = temp
-    
-    # Mostrar top 10
-    print("\n|------------------ Top 10 Puntajes ------------------|")
-    print(f"{'Posicion':<10} {'Nombre':<20} {'Puntaje':<10}")
-    print("-" * 60)
-    
-    cantidad = len(puntajes)
-    if cantidad > 10:
-        cantidad = 10
-    
-    for i in range(cantidad):
-        posicion = i + 1
-        nombre = puntajes[i]["nombre"]
-        puntaje = puntajes[i]["puntaje"]
-        print(f"{posicion:<10} {nombre:<20} {puntaje:<10}")
-    
-    print("-" * 60 + "\n")
 
 def menu_jugador(usuario:int, usuarios:list) -> None:
     """Muestra el menu de opciones para el jugador."""
