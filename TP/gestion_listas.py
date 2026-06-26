@@ -25,7 +25,7 @@ def registrar_usuario(lista : list) -> None:
     apellido_ingresado = pedir_solo_letras("Ingrese su apellido: ")    
     usuario_nuevo.append(apellido_ingresado)
 
-    edad_ingresada = pedir_mayor_a(0, "Ingrese su edad: ") 
+    edad_ingresada = pedir_mayor_a(0, "Ingrese su edad") 
     usuario_nuevo.append(edad_ingresada)
 
     nacionalidad_ingresada = pedir_solo_letras("Ingrese su nacionalidad: ")    
@@ -44,15 +44,14 @@ def registrar_usuario(lista : list) -> None:
 
 def eliminar_usuario(lista : list) -> None:
     """Elimina un usuario del sistema."""
-    email_ingresado = pedir_mail_existente(lista, 1, "Ingrese el email del usuario que desea eliminar: ")
+    dni_ingresado = pedir_dni_existente(lista, 8, "Ingrese el dni del usuario que desea eliminar: ")
 
     for i in range(len(lista)):
-        if lista[i][1] == email_ingresado:
-            print(f"El usuario con email {email_ingresado} ha sido eliminado.")
+        if lista[i][8] == dni_ingresado:
+            print(f"El usuario con el dni {dni_ingresado} ha sido eliminado.")
             lista[i][10] = False
             guardar_datos("TP/usuarios.json", lista)
             break
-
 
 def iniciar_sesion(lista : list) -> list:
     """Inicia sesion en el sistema."""
@@ -73,10 +72,10 @@ def iniciar_sesion(lista : list) -> list:
 def modificar_usuario(lista : list) -> None:
     """Modifica los datos de un usuario existente."""
     mostrar_todos_los_usuarios(lista)
-    email_ingresado = pedir_mail_existente(lista, 1, "Ingrese el email del usuario que desea modificar: ")
+    dni_ingresado = pedir_dni_existente(lista, 8, "Ingrese el dni del usuario que desea modificar: ")
 
     for i in range(len(lista)):
-        if lista[i][1] == email_ingresado:
+        if lista[i][8] == dni_ingresado:
             print(f"Modifique uno de los siguientes datos: {lista[i][1]} - {lista[i][2]} - {lista[i][3]} - {lista[i][4]} - {lista[i][5]} - {lista[i][6]} - {lista[i][7]} - {lista[i][8]} - {lista[i][9]} - {lista[i][10]}")
             break
     
@@ -84,7 +83,7 @@ def modificar_usuario(lista : list) -> None:
     dato_a_modificar = pedir_opciones(opciones, "Ingrese el dato que desea modificar")
 
     for i in range(len(lista)):
-        if email_ingresado == lista[i][1]:
+        if dni_ingresado == lista[i][8]:
             if dato_a_modificar == "mail":
                 nuevo_mail = pedir_email(lista, 1, "Ingrese el nuevo mail: ")                
                 lista[i][1] = nuevo_mail
@@ -106,7 +105,7 @@ def modificar_usuario(lista : list) -> None:
                 lista[i][5] = nuevo_apellido
 
             elif dato_a_modificar == "edad":
-                nueva_edad = pedir_mayor_a(0, "Ingrese la nueva edad: ") 
+                nueva_edad = pedir_mayor_a(0, "Ingrese la nueva edad") 
                 lista[i][6] = int(nueva_edad)
 
             elif dato_a_modificar == "nacionalidad":
@@ -126,7 +125,7 @@ def modificar_usuario(lista : list) -> None:
                 nuevo_activo = bool(nuevo_activo)
                 lista[i][10] = nuevo_activo
             
-            print(f"El usuario con email {email_ingresado} ha sido modificado.")
+            print(f"El usuario {lista[i][4]} {lista[i][5]} ha sido modificado.")
             guardar_datos("TP/usuarios.json", lista)
             break
 

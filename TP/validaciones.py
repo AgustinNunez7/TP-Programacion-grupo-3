@@ -57,10 +57,18 @@ def validar_numero(dato : str) -> bool:
     
     return es_numero
 
-def validar_mayor_a(dato:int, desde:int) -> bool:
+def validar_mayor_a(dato, desde:int) -> bool:
+    """Valida que dato sea un número mayor que 'desde'. Usa sólo funciones ya presentes."""
     numero_valido = False
-    if validar_numero(dato):
-        if int(dato) > desde:
+    dato_str = str(dato)
+
+    # Rechazar cadena vacía
+    if dato_str == "":
+        return False
+
+    # Validar que la representación en cadena sea numérica y luego comparar
+    if validar_numero(dato_str):
+        if int(dato_str) > desde:
             numero_valido = True
 
     return numero_valido
@@ -111,15 +119,23 @@ def pedir_solo_letras(mensaje:str)->str:
 
 def pedir_mayor_a(min:int, mensaje:str)->int:
     numero_ingresado = input(f"{mensaje} (debe ser un numero mayor a {min}): ")
-    while not validar_mayor_a(numero_ingresado, 0):
+    # Comprobar cadena vacía antes de validar para evitar int('')
+    while numero_ingresado == "" or not validar_mayor_a(numero_ingresado, min):
         numero_ingresado = input(f"Debe ser un numero mayor a {min}. {mensaje}: ")
-    
+
     return int(numero_ingresado)
+
+def pedir_dni_existente(lista:list, indice:int, mensaje:str)->int:
+    dni_ingresado = input(mensaje)
+    while not validar_dato_existente(dni_ingresado, lista, indice) or len(dni_ingresado) != 8 or not validar_numero(dni_ingresado):
+        dni_ingresado = input(f"Este DNI no esta registrado. El DNI debe ser un numero de 8 digitos y debe estar registrado. {mensaje} ")
+    
+    return int(dni_ingresado)
 
 def pedir_dni(lista:list, indice:int, mensaje:str)->int:
     dni_ingresado = input(mensaje)
     while validar_dato_existente(dni_ingresado, lista, indice) or len(dni_ingresado) != 8 or not validar_numero(dni_ingresado):
-        dni_ingresado = input(f"Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. \n{mensaje}: ")
+        dni_ingresado = input(f"Este DNI ya está en uso o no es válido. El DNI debe ser un numero de 8 digitos. \n{mensaje} ")
     
     return int(dni_ingresado)
 

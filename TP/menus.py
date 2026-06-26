@@ -77,8 +77,8 @@ def menu_estadisticas(usuarios:list) -> None:
     bandera_stat = True
     while bandera_stat:
         opciones = ["Ver promedio de edad de los usuarios", "Ver el usuario de mayor edad", "Ver el usuario mas joven",
-                     "Ver cantidad de usuarios registrados", "Ver usuarios mayores a una edad ingresada", 
-                     "Determinar si existe un usuario con un nombre específico", "Mostrar todos los usuarios", "Volver al menu anterior"]
+                    "Ver cantidad de usuarios registrados", "Ver usuarios mayores a una edad ingresada", 
+                    "Determinar si existe un usuario con un nombre específico", "Mostrar todos los usuarios", "Volver al menu anterior"]
         mostrar_menu_opciones("Estadisticas", opciones)
         opcion = input("Seleccione una opcion (del 1 al 8): ")
         match opcion:
