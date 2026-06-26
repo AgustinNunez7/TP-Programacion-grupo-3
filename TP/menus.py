@@ -5,6 +5,7 @@ from preguntados import jugar_preguntados
 from persistencia import cargar_datos
 
 def mostrar_menu_opciones(mensaje:str, opciones:list) -> None:
+    """Imprime un menú formateado con `mensaje` y las `opciones` numeradas."""
     menu = ""
     menu += f"\n|------------------ {mensaje} ------------------|\n"
     for i in range(len(opciones)):

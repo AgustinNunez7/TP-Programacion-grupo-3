@@ -130,6 +130,10 @@ def modificar_usuario(lista : list) -> None:
             break
 
 def pasar_dict(lista:list, keys:list):
+    """Convierte una lista y una lista de claves `keys` en un diccionario.
+
+    Asocia cada clave de `keys` con el elemento correspondiente en `lista`.
+    """
     nuevo_dict = {}
     for i in range(len(lista)):
         nuevo_dict[keys[i]] = lista[i]
@@ -137,6 +141,10 @@ def pasar_dict(lista:list, keys:list):
     return nuevo_dict
 
 def pasar_list_dict(lista:list, keys:list):
+    """Convierte una lista de listas en una lista de diccionarios usando `keys`.
+
+    Para cada sublista en `lista` llama a `pasar_dict` y agrega el diccionario resultante.
+    """
     nueva_list = []
     for i in range(len(lista)):
         nuevo_dict = pasar_dict(lista[i],keys)

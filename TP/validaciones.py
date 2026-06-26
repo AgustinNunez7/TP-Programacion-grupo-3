@@ -74,6 +74,7 @@ def validar_mayor_a(dato, desde:int) -> bool:
     return numero_valido
 
 def validar_rango(dato:int, desde:int, hasta:int) -> bool:
+    """Valida que un número esté entre `desde` y `hasta` (exclusivo)."""
     numero_valido = False
     if validar_numero(str(dato)):
         if dato > desde and dato < hasta:
@@ -82,7 +83,7 @@ def validar_rango(dato:int, desde:int, hasta:int) -> bool:
     return numero_valido
 
 def validar_tipo_dato(dato:str, opciones:list) -> bool:
-    """Valida que el tipo ingresado sea uno de los tipos de pokemon.""" #Es MUY IMPORTANTE los pokemones
+    """Valida que el tipo de dato ingresado.""" 
     opcion_valida = False
     for i in range(len(opciones)):
         if dato == opciones[i]:
